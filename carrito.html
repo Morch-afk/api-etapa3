@@ -1,0 +1,39 @@
+<div class="container">
+    <nav class="breadcrumb">
+        <a href="index.html">Menú Principal</a> > 
+        <span>Carrito ({{ totalItems }} artículos)</span>
+    </nav>
+
+    <table class="cart-table">
+        <thead>
+            <tr>
+                <th>Imagen</th>
+                <th>Producto</th>
+                <th>Cantidad</th>
+                <th>Precio</th>
+                <th>Importe</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr v-for="item in cart" :key="item.id">
+                <td><img :src="item.url" alt="Imagen"></td>
+                <td>{{ item.name }}</td>
+                <td>
+                    <button @click="decreaseQuantity(item)">-</button>
+                    <input type="number" v-model="item.quantity" min="1" max="10">
+                    <button @click="increaseQuantity(item)">+</button>
+                </td>
+                <td>${{ item.price }}</td>
+                <td>${{ item.price * item.quantity }}</td>
+                <td><button @click="removeItem(item)">Eliminar</button></td>
+            </tr>
+        </tbody>
+    </table>
+
+    <div class="summary">
+        <p>Subtotal: ${{ subtotal }}</p>
+        <p>IVA (16%): ${{ iva }}</p>
+        <p>Total: ${{ total }}</p>
+    </div>
+</div>

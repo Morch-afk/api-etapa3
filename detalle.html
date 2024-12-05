@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Detalle del Producto</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header>
+        <h1>Detalle del Producto</h1>
+    </header>
+
+    <nav class="breadcrumb">
+        <a href="#" id="back-to-main">Menú Principal</a> >
+        <span id="product-name"></span>
+    </nav>
+
+    <div class="container">
+        <div class="product-detail">
+            <div class="image-container">
+                <img id="product-image" src="" alt="Imagen del Producto">
+            </div>
+            <div class="details">
+                <h2 id="product-name-detail"></h2>
+                <p id="product-category"></p>
+                <p id="product-description"></p>
+                <p>Precio: $<span id="product-price"></span></p>
+                <div class="quantity">
+                    <button id="decrease-quantity" disabled>-</button>
+                    <input type="number" id="product-quantity" value="1" min="1" max="6" readonly>
+                    <button id="increase-quantity">+</button>
+                </div>
+                <button class="button-buy">Agregar al Carrito</button>
+            </div>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <p>&copy; 2024 Shinjuku Posters</p>
+    </footer>
+
+    <script src="detalle.js"></script>
+</body>
+</html>

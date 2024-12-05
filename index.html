@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shinjuku Posters</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div id="app">
+        <header>
+            <h1>Shinjuku Posters</h1>
+            <div class="cart-icon" @click="viewCart">
+                🛒 <span class="cart-count">{{ totalItems }}</span>
+            </div>
+        </header>
+
+        <div class="container">
+            <div class="filters">
+                <input type="text" v-model="searchQuery" placeholder="Buscar por nombre o ID" class="search-input" />
+                <select v-model="selectedType" @change="loadWaifus">
+                    <option value="">Seleccionar tipo de Waifu</option>
+                    <option value="waifu">Waifu</option>
+                    <option value="neko">Neko</option>
+                    <option value="megumin">Megumin</option>
+                    <option value="blush">Blush</option>
+                    <option value="shiro">Shiro</option>
+                </select>
+            </div>
+
+            <div class="waifu-list">
+                <div v-for="waifu in filteredWaifus" :key="waifu.id" class="waifu-card">
+                    <img :src="waifu.url" :alt="waifu.name" />
+                    <p>{{ waifu.name }} - Precio: ${{ waifu.price }}</p>
+                    <button class="button-buy" @click="addToCart(waifu)">Comprar</button>
+                    <button class="button-buy" @click="viewProductDetail(waifu)">Ver Detalle</button>
+
+                </div>
+            </div>
+
+            <div class="progress-bar" :style="{ width: progressBarWidth }"></div>
+
+            <div class="cart">
+                <h3>Carrito de Compras</h3>
+                <ul class="cart-list">
+                    <li v-for="(item, index) in cart" :key="index" class="cart-item">
+                        <img :src="item.url" alt="Producto" />
+                        <span>{{ item.name }} - Precio: ${{ item.price }} x {{ item.quantity }}</span>
+                        <button @click="removeFromCart(index)" class="button-remove">Eliminar</button>
+                    </li>
+                </ul>
+                
+                <p>Subtotal: ${{ subtotal }}</p>
+                <p>IVA (16%): ${{ iva }}</p>
+                <p>Total: ${{ total }}</p>
+                <button class="button-checkout" @click="completePurchase">Hacer Compra</button>
+            </div>
+        </div>
+
+        <footer class="footer">
+            <p>&copy; 2024 Shinjuku Posters</p>
+        </footer>
+    </div>
+
+    <script src="https://unpkg.com/vue@3"></script>
+    <script src="script.js"></script>
+</body>
+</html>
