@@ -4,17 +4,17 @@ createApp({
     data() {
         return {
             waifus: [],
-            cart: [],
+            cart: JSON.parse(localStorage.getItem('cart')) || [], // Recuperar carrito
             searchQuery: '',
-            selectedType: '',
+            selectedType: 'waifu',
             progressBarWidth: '0%',
         };
     },
     computed: {
         filteredWaifus() {
-            return this.waifus?.filter(waifu =>
-                waifu.name.toLowerCase().includes(this.searchQuery.toLowerCase()) ||
-                waifu.id.toString().includes(this.searchQuery)
+            const query = this.searchQuery.toLowerCase().trim();
+            return this.waifus.filter(waifu =>
+                waifu.name.toLowerCase().includes(query) || waifu.id.toString().includes(query)
             );
         },
         subtotal() {
@@ -26,6 +26,9 @@ createApp({
         total() {
             return this.subtotal + this.iva;
         },
+        totalItems() {
+            return this.cart.reduce((sum, item) => sum + item.quantity, 0);
+        },
     },
     methods: {
         async loadWaifus() {
@@ -33,10 +36,8 @@ createApp({
                 const type = this.selectedType || 'waifu';
                 const url = `https://api.waifu.pics/sfw/${type}`;
                 this.waifus = [];
-
                 for (let i = 0; i < 9; i++) {
                     const response = await fetch(url);
-                    if (!response.ok) throw new Error(`Error al obtener datos: ${response.status}`);
                     const data = await response.json();
                     this.waifus.push({
                         id: i + 1,
@@ -47,47 +48,61 @@ createApp({
                     });
                 }
             } catch (error) {
-                console.error('Error al cargar waifus:', error);
+                console.error('Error:', error);
+                alert('No se pudieron cargar los datos.');
             }
         },
         addToCart(waifu) {
             const existingItem = this.cart.find(item => item.id === waifu.id);
             if (existingItem) {
-                existingItem.quantity += 1;
+                existingItem.quantity++;
             } else {
                 this.cart.push({ ...waifu });
             }
+            this.updateCartStorage();
             this.updateProgressBar();
         },
         removeFromCart(index) {
             this.cart.splice(index, 1);
+            this.updateCartStorage();
             this.updateProgressBar();
         },
+        increaseQuantity(item) {
+            if (item.quantity < 10) {
+                item.quantity++;
+                this.updateCartStorage();
+            }
+        },
+        decreaseQuantity(item) {
+            if (item.quantity > 1) {
+                item.quantity--;
+                this.updateCartStorage();
+            }
+        },
+        updateCartStorage() {
+            localStorage.setItem('cart', JSON.stringify(this.cart));
+        },
         completePurchase() {
-            alert('Compra realizada con éxito!');
+            alert('¡Compra completada!');
             this.cart = [];
+            this.updateCartStorage();
             this.updateProgressBar();
         },
         updateProgressBar() {
-            const progress = Math.min((this.cart.reduce((sum, item) => sum + item.quantity, 0) / 9) * 100, 100);
+            const progress = Math.min((this.totalItems / 9) * 100, 100);
             this.progressBarWidth = `${progress}%`;
         },
         getRandomPrice(min, max) {
             return Math.floor(Math.random() * (max - min + 1)) + min;
         },
         viewProductDetail(waifu) {
+            // Almacena el producto seleccionado en localStorage
             localStorage.setItem('selectedProduct', JSON.stringify(waifu));
-            const scrollPosition = window.scrollY || window.pageYOffset;
-            localStorage.setItem('scrollPosition', scrollPosition);
-            window.location.href = 'detalle.html';
+            // Redirige a la página de detalle
+            window.location.href = './detalle.html';
         },
     },
     mounted() {
         this.loadWaifus();
-        const savedPosition = localStorage.getItem('scrollPosition');
-        if (savedPosition) {
-            window.scrollTo(0, parseInt(savedPosition, 10));
-            localStorage.removeItem('scrollPosition');
-        }
-    }
+    },
 }).mount('#app');

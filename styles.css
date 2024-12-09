@@ -70,19 +70,19 @@ header {
 }
 
 .button-buy {
-    background-color: #3ce1e7;
+    background-color: #f10fa6;
     color: white;
-    padding: 10px;
     border: none;
     border-radius: 5px;
+    padding: 10px 15px;
     cursor: pointer;
-    margin-top: 10px;
-    font-size: 16px;
+    transition: background-color 0.3s ease;
 }
 
 .button-buy:hover {
     background-color: #2b46c0;
 }
+
 
 .progress-bar {
     height: 20px;
@@ -181,22 +181,23 @@ header {
     margin-top: 20px;
 }
 .back-button {
-    margin-top: 20px;
-    padding: 10px 20px;
-    background-color: #3ce1e7;
+    background-color: #8212f3;
     color: white;
-    border: none;
+    padding: 10px 20px;
     border-radius: 5px;
     font-size: 16px;
-    cursor: pointer;
     text-decoration: none;
     display: inline-block;
-    transition: background-color 0.3s;
+    text-align: center;
+    transition: background-color 0.3s ease;
+    cursor: pointer;
 }
 
 .back-button:hover {
-    background-color: #2b46c0;
+    background-color: #3ce1e7;
+    color: #000;
 }
+
 .image-container img {
     max-width: 500px;
     width: 100%;
